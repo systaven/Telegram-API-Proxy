@@ -35,7 +35,7 @@ const SUSPICIOUS_THRESHOLD = 10;
 
 const ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
 const MAX_BODY_SIZE = 50 * 1024 * 1024;
-const ALLOWED_COUNTRIES = ['IR'];
+const ALLOWED_COUNTRIES = [];
 const BLOCKED_COUNTRIES = [];
 const ALLOWED_USER_AGENTS = /telegram|bot|curl|postman|httpie|axios|fetch/i;
 const BLOCKED_USER_AGENTS = /scanner|crawler|spider|bot.*attack|sqlmap|nikto|nmap/i;
@@ -585,7 +585,11 @@ async function proxyToTelegram(request, requestInfo, attempt = 0) {
         
         const responseHeaders = new Headers(response.headers);
         addAdvancedSecurityHeaders(responseHeaders);
-        
+
+
+
+        responseHeaders.delete('content-encoding');
+        responseHeaders.delete('content-length');
         const responseBody = await response.arrayBuffer();
         
         return new Response(responseBody, {
